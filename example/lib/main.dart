@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:io' show Platform;
-import 'package:lpapi_thermal_printer/lpapi_thermal_printer.dart';
+import 'package:flutter_dothantech_lpapi_thermal_printer/flutter_dothantech_lpapi_thermal_printer.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 void main() {

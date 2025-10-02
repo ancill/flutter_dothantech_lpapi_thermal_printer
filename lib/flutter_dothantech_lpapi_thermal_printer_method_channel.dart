@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
-import 'lpapi_thermal_printer_platform_interface.dart';
+import 'flutter_dothantech_lpapi_thermal_printer_platform_interface.dart';
 
 /// An implementation of [LpapiThermalPrinterPlatform] that uses method channels.
 class MethodChannelLpapiThermalPrinter extends LpapiThermalPrinterPlatform {

@@ -1,6 +1,6 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-import 'lpapi_thermal_printer_method_channel.dart';
+import 'flutter_dothantech_lpapi_thermal_printer_method_channel.dart';
 
 abstract class LpapiThermalPrinterPlatform extends PlatformInterface {
   /// Constructs a LpapiThermalPrinterPlatform.

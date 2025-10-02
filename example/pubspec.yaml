@@ -1,4 +1,4 @@
-name: lpapi_thermal_printer_example
+name: flutter_dothantech_lpapi_thermal_printer_example
 description: "Demonstrates how to use the lpapi_thermal_printer plugin."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -17,9 +17,9 @@ dependencies:
   flutter:
     sdk: flutter
 
-  lpapi_thermal_printer:
+  flutter_dothantech_lpapi_thermal_printer:
     # When depending on this package from a real application you should use:
-    #   lpapi_thermal_printer: ^x.y.z
+    #   flutter_dothantech_lpapi_thermal_printer: ^x.y.z
     # See https://dart.dev/tools/pub/dependencies#version-constraints
     # The example app is bundled with the plugin so we use a path dependency on
     # the parent directory to use the current plugin's version.

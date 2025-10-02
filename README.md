@@ -44,7 +44,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  lpapi_thermal_printer: ^1.0.0
+  flutter_dothantech_lpapi_thermal_printer: ^1.0.0
 ```
 
 Then run:
@@ -94,7 +94,7 @@ iOS support is not currently implemented. Pull requests are welcome!
 ### Import the package
 
 ```dart
-import 'package:lpapi_thermal_printer/lpapi_thermal_printer.dart';
+import 'package:flutter_dothantech_lpapi_thermal_printer/flutter_dothantech_lpapi_thermal_printer.dart';
 ```
 
 ### Initialize the printer
@@ -232,7 +232,7 @@ await printer.disconnectPrinter();
 
 ```dart
 import 'package:flutter/material.dart';
-import 'package:lpapi_thermal_printer/lpapi_thermal_printer.dart';
+import 'package:flutter_dothantech_lpapi_thermal_printer/flutter_dothantech_lpapi_thermal_printer.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PrinterExample extends StatefulWidget {

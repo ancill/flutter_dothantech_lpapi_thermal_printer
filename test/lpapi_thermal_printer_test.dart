@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lpapi_thermal_printer/lpapi_thermal_printer.dart';
-import 'package:lpapi_thermal_printer/lpapi_thermal_printer_platform_interface.dart';
+import 'package:flutter_dothantech_lpapi_thermal_printer/flutter_dothantech_lpapi_thermal_printer.dart';
+import 'package:flutter_dothantech_lpapi_thermal_printer/flutter_dothantech_lpapi_thermal_printer_platform_interface.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 class MockLpapiThermalPrinterPlatform

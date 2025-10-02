@@ -1,4 +1,4 @@
-import 'lpapi_thermal_printer_platform_interface.dart';
+import 'flutter_dothantech_lpapi_thermal_printer_platform_interface.dart';
 
 /// Printer information model
 class PrinterInfo {

@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lpapi_thermal_printer/lpapi_thermal_printer_method_channel.dart';
+import 'package:flutter_dothantech_lpapi_thermal_printer/flutter_dothantech_lpapi_thermal_printer_method_channel.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
