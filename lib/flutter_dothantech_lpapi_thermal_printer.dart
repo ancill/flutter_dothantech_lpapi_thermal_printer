@@ -6,11 +6,7 @@ class PrinterInfo {
   final String address;
   final String type;
 
-  PrinterInfo({
-    required this.name,
-    required this.address,
-    required this.type,
-  });
+  PrinterInfo({required this.name, required this.address, required this.type});
 
   factory PrinterInfo.fromMap(Map<String, dynamic> map) {
     return PrinterInfo(
@@ -38,7 +34,8 @@ class LpapiThermalPrinter {
   /// Discover printers using Bluetooth discovery (finds unpaired printers too)
   /// Returns a list of discovered printers
   Future<List<PrinterInfo>> discoverPrinters() async {
-    final result = await LpapiThermalPrinterPlatform.instance.discoverPrinters();
+    final result = await LpapiThermalPrinterPlatform.instance
+        .discoverPrinters();
     return result.map((map) => PrinterInfo.fromMap(map)).toList();
   }
 

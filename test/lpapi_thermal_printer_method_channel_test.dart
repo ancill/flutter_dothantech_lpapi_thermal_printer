@@ -5,20 +5,20 @@ import 'package:flutter_dothantech_lpapi_thermal_printer/flutter_dothantech_lpap
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  MethodChannelLpapiThermalPrinter platform = MethodChannelLpapiThermalPrinter();
+  MethodChannelLpapiThermalPrinter platform =
+      MethodChannelLpapiThermalPrinter();
   const MethodChannel channel = MethodChannel('lpapi_thermal_printer');
 
   setUp(() {
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
-      channel,
-      (MethodCall methodCall) async {
-        return '42';
-      },
-    );
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, (MethodCall methodCall) async {
+          return '42';
+        });
   });
 
   tearDown(() {
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(channel, null);
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, null);
   });
 
   test('getPlatformVersion', () async {

@@ -59,7 +59,8 @@ class MockLpapiThermalPrinterPlatform
 void main() {
   test('getPlatformVersion', () async {
     LpapiThermalPrinter lpapiThermalPrinterPlugin = LpapiThermalPrinter();
-    MockLpapiThermalPrinterPlatform fakePlatform = MockLpapiThermalPrinterPlatform();
+    MockLpapiThermalPrinterPlatform fakePlatform =
+        MockLpapiThermalPrinterPlatform();
     LpapiThermalPrinterPlatform.instance = fakePlatform;
 
     expect(await lpapiThermalPrinterPlugin.getPlatformVersion(), '42');
@@ -67,7 +68,8 @@ void main() {
 
   test('searchPrinters returns empty list from mock', () async {
     LpapiThermalPrinter lpapiThermalPrinterPlugin = LpapiThermalPrinter();
-    MockLpapiThermalPrinterPlatform fakePlatform = MockLpapiThermalPrinterPlatform();
+    MockLpapiThermalPrinterPlatform fakePlatform =
+        MockLpapiThermalPrinterPlatform();
     LpapiThermalPrinterPlatform.instance = fakePlatform;
 
     expect(await lpapiThermalPrinterPlugin.searchPrinters(), isEmpty);
@@ -75,7 +77,8 @@ void main() {
 
   test('connectPrinter returns true from mock', () async {
     LpapiThermalPrinter lpapiThermalPrinterPlugin = LpapiThermalPrinter();
-    MockLpapiThermalPrinterPlatform fakePlatform = MockLpapiThermalPrinterPlatform();
+    MockLpapiThermalPrinterPlatform fakePlatform =
+        MockLpapiThermalPrinterPlatform();
     LpapiThermalPrinterPlatform.instance = fakePlatform;
 
     expect(await lpapiThermalPrinterPlugin.connectPrinter('test'), true);

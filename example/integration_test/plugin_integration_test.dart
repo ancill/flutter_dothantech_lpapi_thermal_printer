@@ -9,7 +9,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
-import 'package:lpapi_thermal_printer/lpapi_thermal_printer.dart';
+import 'package:flutter_dothantech_lpapi_thermal_printer/flutter_dothantech_lpapi_thermal_printer.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();

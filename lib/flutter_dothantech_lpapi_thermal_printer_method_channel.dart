@@ -35,20 +35,28 @@ class MethodChannelLpapiThermalPrinter extends LpapiThermalPrinterPlatform {
 
   @override
   Future<String?> getPlatformVersion() async {
-    final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
+    final version = await methodChannel.invokeMethod<String>(
+      'getPlatformVersion',
+    );
     return version;
   }
 
   @override
   Future<List<Map<String, dynamic>>> searchPrinters() async {
-    final result = await methodChannel.invokeMethod<List<dynamic>>('searchPrinters');
-    return result?.map((e) => Map<String, dynamic>.from(e as Map)).toList() ?? [];
+    final result = await methodChannel.invokeMethod<List<dynamic>>(
+      'searchPrinters',
+    );
+    return result?.map((e) => Map<String, dynamic>.from(e as Map)).toList() ??
+        [];
   }
 
   @override
   Future<List<Map<String, dynamic>>> discoverPrinters() async {
-    final result = await methodChannel.invokeMethod<List<dynamic>>('discoverPrinters');
-    return result?.map((e) => Map<String, dynamic>.from(e as Map)).toList() ?? [];
+    final result = await methodChannel.invokeMethod<List<dynamic>>(
+      'discoverPrinters',
+    );
+    return result?.map((e) => Map<String, dynamic>.from(e as Map)).toList() ??
+        [];
   }
 
   @override
@@ -61,7 +69,9 @@ class MethodChannelLpapiThermalPrinter extends LpapiThermalPrinterPlatform {
 
   @override
   Future<bool> connectFirstPrinter() async {
-    final result = await methodChannel.invokeMethod<bool>('connectFirstPrinter');
+    final result = await methodChannel.invokeMethod<bool>(
+      'connectFirstPrinter',
+    );
     return result ?? false;
   }
 
@@ -88,7 +98,12 @@ class MethodChannelLpapiThermalPrinter extends LpapiThermalPrinterPlatform {
   }
 
   @override
-  Future<bool> print1DBarcode(String barcode, {String text = '', int width = 48, int height = 50}) async {
+  Future<bool> print1DBarcode(
+    String barcode, {
+    String text = '',
+    int width = 48,
+    int height = 50,
+  }) async {
     final result = await methodChannel.invokeMethod<bool>('print1DBarcode', {
       'barcode': barcode,
       'text': text,
@@ -99,7 +114,11 @@ class MethodChannelLpapiThermalPrinter extends LpapiThermalPrinterPlatform {
   }
 
   @override
-  Future<bool> print2DBarcode(String barcode, {int width = 48, int height = 50}) async {
+  Future<bool> print2DBarcode(
+    String barcode, {
+    int width = 48,
+    int height = 50,
+  }) async {
     final result = await methodChannel.invokeMethod<bool>('print2DBarcode', {
       'barcode': barcode,
       'width': width,
