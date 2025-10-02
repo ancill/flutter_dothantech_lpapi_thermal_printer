@@ -1,8 +1,8 @@
-name: flutter_dothantech_lpapi_thermal_printer
+name: lpapi_thermal_printer
 description: "Flutter plugin for Dothantech LPAPI thermal label printers. Supports Bluetooth discovery, direct connection without pairing, and printing of text, barcodes, QR codes, and images."
 version: 1.0.0
 repository: https://github.com/ancill/flutter_dothantech_lpapi_thermal_printer
-homepage: https://pub.dev/packages/flutter_dothantech_lpapi_thermal_printer
+homepage: https://pub.dev/packages/lpapi_thermal_printer
 
 environment:
   sdk: ^3.9.2
