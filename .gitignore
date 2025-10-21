@@ -31,3 +31,50 @@ migrate_working_dir/
 .flutter-plugins-dependencies
 /build/
 /coverage/
+
+# iOS specific
+**/ios/.symlinks/
+**/ios/Pods/
+**/ios/Podfile.lock
+**/ios/.generated/
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/ServiceDefinitions.json
+**/ios/Runner/GeneratedPluginRegistrant.*
+**/.flutter-plugins
+
+# Android specific
+**/android/.gradle/
+**/android/local.properties
+**/android/.idea/
+**/android/build/
+**/android/app/build/
+**/android/gradle/
+**/android/gradlew
+**/android/gradlew.bat
+**/android/key.properties
+**/android/app/*.jks
+**/android/app/*.keystore
+
+# Sensitive/Private files
+*.key
+*.p12
+*.pem
+*.pfx
+**/secrets.json
+**/credentials.json
+**/.env
+**/.env.*
+
+# IDE
+.vscode/
+.idea/
+
+# Don't publish the original iOS SDK folder (we use the libraries in ios/Frameworks)
+iOS SDK*/
+
+# Don't include example iOS Frameworks (too large, will be downloaded via pod)
+example/ios/Frameworks/

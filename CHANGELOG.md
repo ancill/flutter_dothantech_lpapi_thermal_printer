@@ -2,6 +2,45 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.0] - 2024-10-21
+
+### Added
+
+- **iOS Support**: Full iOS implementation with feature parity to Android
+  - Bluetooth printer discovery using LPAPI SDK
+  - Direct connection to printers by name
+  - Print text, 1D barcodes, 2D QR codes, and images
+  - Adjustable print density (0-20, auto-mapped to iOS range 0-15)
+  - Adjustable print speed (1-5)
+  - Connection status monitoring and event callbacks
+  - All features available on both iOS and Android platforms
+
+### Changed
+
+- Updated README with comprehensive iOS setup instructions
+- Enhanced example app with platform detection indicator (shows "Running on iOS" or "Running on Android")
+- Improved documentation with iOS-specific troubleshooting guide
+- Added `IOS_IMPLEMENTATION.md` technical documentation
+- Updated package description to highlight cross-platform support
+
+### Technical Details
+
+- Added Objective-C implementation (`FlutterDothantechLpapiThermalPrinterPlugin.m`)
+- Integrated LPAPI SDK for iOS (supports iOS 12.0+)
+- Implemented conditional library linking for device and simulator builds
+- Added proper CocoaPods configuration with separate libraries for device/simulator
+- Updated pubspec.yaml to include iOS platform registration
+
+### Platform Support
+
+- Android: Full support (unchanged)
+- iOS: **NEW** - Full support added
+
+### Breaking Changes
+
+- Version bumped to 2.0.0 to indicate major feature addition (iOS support)
+- No API changes - existing Android code remains fully compatible
+
 ## [1.0.0] - 2024-10-01
 
 ### Added

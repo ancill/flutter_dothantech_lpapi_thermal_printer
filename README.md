@@ -12,6 +12,7 @@ A Flutter plugin for Dothantech thermal label printers that provides seamless Bl
 - 🖼️ **Image Printing**: Print images from base64 data
 - ⚙️ **Print Settings**: Adjustable density and speed
 - 📱 **Android Support**: Full support for Android devices
+- 🍎 **iOS Support**: Full support for iOS devices
 
 ## Supported Printers
 
@@ -87,7 +88,24 @@ android {
 
 ### iOS
 
-iOS support is not currently implemented. Pull requests are welcome!
+#### Permissions
+
+Add the following to your `ios/Runner/Info.plist`:
+
+```xml
+<key>NSBluetoothAlwaysUsageDescription</key>
+<string>This app needs Bluetooth access to connect to thermal printers</string>
+<key>NSBluetoothPeripheralUsageDescription</key>
+<string>This app needs Bluetooth access to connect to thermal printers</string>
+```
+
+#### Deployment Target
+
+Ensure your iOS deployment target is at least 12.0. Update `ios/Podfile`:
+
+```ruby
+platform :ios, '12.0'
+```
 
 ## Usage
 
@@ -103,7 +121,9 @@ import 'package:flutter_dothantech_lpapi_thermal_printer/flutter_dothantech_lpap
 final printer = LpapiThermalPrinter();
 ```
 
-### Request Permissions (Android)
+### Request Permissions
+
+#### Android
 
 For Android 12+ (API 31+), you need to request Bluetooth permissions at runtime:
 
@@ -122,6 +142,9 @@ Future<void> requestPermissions() async {
     if (!statuses.values.every((status) => status.isGranted)) {
       print('Please grant all permissions to use the printer');
     }
+  } else if (Platform.isIOS) {
+    // iOS will automatically request Bluetooth permissions when scanning
+    // No additional runtime permissions needed if Info.plist is configured
   }
 }
 ```
@@ -393,6 +416,15 @@ For Android 12 and above, location permission is required for Bluetooth scanning
 1. Request permissions at runtime
 2. Enable location services on the device
 3. Add all required permissions to AndroidManifest.xml
+
+### iOS Bluetooth Issues
+
+For iOS devices:
+
+1. Ensure Bluetooth permissions are added to Info.plist
+2. Make sure the device's Bluetooth is turned on
+3. The printer must be in pairing/discoverable mode
+4. iOS may cache Bluetooth connections - try restarting the app if connection fails
 
 ## Contributing
 

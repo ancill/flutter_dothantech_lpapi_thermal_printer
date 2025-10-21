@@ -33,6 +33,7 @@ class _PrinterDemoPageState extends State<PrinterDemoPage> {
   String _connectionStatus = 'Disconnected';
   String? _connectedPrinterAddress;
   bool _isSearching = false;
+  String _platformInfo = '';
 
   // Text controllers
   final _textController = TextEditingController(
@@ -50,6 +51,21 @@ class _PrinterDemoPageState extends State<PrinterDemoPage> {
   void initState() {
     super.initState();
     _checkPrinterStatus();
+    _getPlatformInfo();
+  }
+
+  Future<void> _getPlatformInfo() async {
+    try {
+      final version = await _printer.getPlatformVersion();
+      final platform = Platform.isAndroid ? 'Android' : Platform.isIOS ? 'iOS' : 'Unknown';
+      setState(() {
+        _platformInfo = 'Running on $platform (Driver: $version)';
+      });
+    } catch (e) {
+      setState(() {
+        _platformInfo = 'Platform info unavailable';
+      });
+    }
   }
 
   @override
@@ -335,6 +351,34 @@ class _PrinterDemoPageState extends State<PrinterDemoPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Platform Info Card
+            if (_platformInfo.isNotEmpty)
+              Card(
+                color: Platform.isIOS ? Colors.blue.shade50 : Colors.green.shade50,
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Platform.isIOS ? Icons.apple : Icons.android,
+                        color: Platform.isIOS ? Colors.blue : Colors.green,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          _platformInfo,
+                          style: TextStyle(
+                            color: Platform.isIOS ? Colors.blue.shade900 : Colors.green.shade900,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            if (_platformInfo.isNotEmpty) const SizedBox(height: 16),
+
             // Connection Status Card
             Card(
               child: Padding(
