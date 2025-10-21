@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.1] - 2024-10-21
+
+### Changed
+
+- Optimized package description to be within the recommended 60-180 character range for better search engine display
+
 ## [2.0.0] - 2024-10-21
 
 ### Added

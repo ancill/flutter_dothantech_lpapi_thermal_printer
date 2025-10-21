@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'flutter_dothantech_lpapi_thermal_printer'
-  s.version          = '2.0.0'
+  s.version          = '2.0.1'
   s.summary          = 'Flutter plugin for Dothantech LPAPI thermal label printers'
   s.description      = <<-DESC
 Flutter plugin for Dothantech LPAPI thermal label printers. Supports Bluetooth discovery, direct connection without pairing, and printing of text, barcodes, QR codes, and images.
