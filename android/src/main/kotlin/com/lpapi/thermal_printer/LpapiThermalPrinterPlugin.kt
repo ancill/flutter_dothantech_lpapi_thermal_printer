@@ -166,6 +166,16 @@ class LpapiThermalPrinterPlugin: FlutterPlugin, MethodCallHandler {
         print2DBarcode(barcode, width, height, result)
       }
 
+      "printLotLabel" -> {
+        val lotId = call.argument<String>("lotId") ?: ""
+        val sku = call.argument<String>("sku") ?: ""
+        val expiryDate = call.argument<String>("expiryDate")
+        val locationCode = call.argument<String>("locationCode")
+        val width = call.argument<Int>("width") ?: 50
+        val height = call.argument<Int>("height") ?: 30
+        printLotLabel(lotId, sku, expiryDate, locationCode, width, height, result)
+      }
+
       "printImage" -> {
         val imageData = call.argument<String>("imageData")
         if (imageData != null) {
@@ -455,6 +465,77 @@ class LpapiThermalPrinterPlugin: FlutterPlugin, MethodCallHandler {
       result.success(true)
     } else {
       result.error("PRINT_FAILED", "Failed to print QR code", null)
+    }
+  }
+
+  /**
+   * Print an inventory lot label (50x30mm format)
+   * Layout:
+   *   Left: QR code (~24x24mm) containing lotId
+   *   Right (stacked): SKU (largest), EXP, LOC (optional), LOT (small)
+   */
+  private fun printLotLabel(
+    lotId: String,
+    sku: String,
+    expiryDate: String?,
+    locationCode: String?,
+    width: Int,
+    height: Int,
+    result: Result
+  ) {
+    val state = api.getPrinterState()
+    if (state != PrinterState.Connected && state != PrinterState.Connected2) {
+      result.error("NOT_CONNECTED", "Printer is not connected", null)
+      return
+    }
+
+    // Start drawing task (50mm x 30mm label)
+    api.startJob(width.toDouble(), height.toDouble(), 0)
+
+    // Layout calculations (all in mm)
+    // QR code on left side: ~24mm, positioned with 2mm margin
+    val qrSize = 24.0
+    val qrX = 2.0
+    val qrY = (height - qrSize) / 2  // Vertically centered
+
+    // Text area starts after QR + 2mm gap
+    val textX = qrX + qrSize + 2.0
+    val textWidth = width - textX - 2.0  // Right margin 2mm
+
+    // Draw QR code containing LOT ID
+    api.draw2DQRCode(lotId, qrX, qrY, qrSize)
+
+    // Calculate text positions
+    // Available height: ~28mm (30mm - 2mm margins)
+    // Divide among 3-4 lines
+    val lineHeight = 5.5
+    var currentY = 3.0
+
+    // SKU - largest text (6mm font)
+    api.drawText(sku, textX, currentY, textWidth, lineHeight + 1, 6.0)
+    currentY += lineHeight + 2
+
+    // Expiry date (if provided)
+    if (!expiryDate.isNullOrEmpty()) {
+      api.drawText("EXP $expiryDate", textX, currentY, textWidth, lineHeight, 4.0)
+      currentY += lineHeight + 0.5
+    }
+
+    // Location code (optional)
+    if (!locationCode.isNullOrEmpty()) {
+      api.drawText("LOC $locationCode", textX, currentY, textWidth, lineHeight, 4.0)
+      currentY += lineHeight + 0.5
+    }
+
+    // LOT ID - smaller text at bottom
+    val shortLotId = if (lotId.length > 10) lotId.takeLast(10) else lotId
+    api.drawText("LOT $shortLotId", textX, currentY, textWidth, lineHeight, 3.0)
+
+    // Commit job
+    if (api.commitJob()) {
+      result.success(true)
+    } else {
+      result.error("PRINT_FAILED", "Failed to print lot label", null)
     }
   }
 

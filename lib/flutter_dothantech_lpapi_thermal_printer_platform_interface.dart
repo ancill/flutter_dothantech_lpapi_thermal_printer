@@ -73,6 +73,19 @@ abstract class LpapiThermalPrinterPlatform extends PlatformInterface {
     throw UnimplementedError('print2DBarcode() has not been implemented.');
   }
 
+  /// Print an inventory lot label with QR code and text
+  /// Layout: QR on left (~24mm), SKU/EXP/LOC/LOT stacked on right
+  Future<bool> printLotLabel({
+    required String lotId,
+    required String sku,
+    String? expiryDate,
+    String? locationCode,
+    int width = 50,
+    int height = 30,
+  }) {
+    throw UnimplementedError('printLotLabel() has not been implemented.');
+  }
+
   Future<bool> printImage(String base64Image) {
     throw UnimplementedError('printImage() has not been implemented.');
   }

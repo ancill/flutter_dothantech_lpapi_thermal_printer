@@ -110,6 +110,40 @@ class LpapiThermalPrinter {
     );
   }
 
+  /// Print an inventory lot label with QR code and text
+  ///
+  /// Layout (50x30mm):
+  /// - Left: QR code (~24x24mm) encoding [lotId]
+  /// - Right (stacked):
+  ///   - SKU (largest font)
+  ///   - EXP YYYY-MM-DD (if provided)
+  ///   - LOC ABC-12 (if provided)
+  ///   - LOT {last 10 chars of lotId} (smallest font)
+  ///
+  /// [lotId] - Unique lot identifier (encoded in QR)
+  /// [sku] - Product SKU code (displayed largest)
+  /// [expiryDate] - Optional expiry date string (e.g., "2025-03-15")
+  /// [locationCode] - Optional location code (e.g., "A-01-02")
+  /// [width] - Label width in mm (default: 50)
+  /// [height] - Label height in mm (default: 30)
+  Future<bool> printLotLabel({
+    required String lotId,
+    required String sku,
+    String? expiryDate,
+    String? locationCode,
+    int width = 50,
+    int height = 30,
+  }) {
+    return LpapiThermalPrinterPlatform.instance.printLotLabel(
+      lotId: lotId,
+      sku: sku,
+      expiryDate: expiryDate,
+      locationCode: locationCode,
+      width: width,
+      height: height,
+    );
+  }
+
   /// Print an image from base64 encoded data
   /// [base64Image] - Base64 encoded image data
   Future<bool> printImage(String base64Image) {
