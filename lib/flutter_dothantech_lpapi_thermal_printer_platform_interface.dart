@@ -86,6 +86,21 @@ abstract class LpapiThermalPrinterPlatform extends PlatformInterface {
     throw UnimplementedError('printLotLabel() has not been implemented.');
   }
 
+  /// Print a weighted item label for pick/pack
+  /// Used for items sold by weight (apples, cheese, etc.)
+  /// Layout: QR on left, product name/weight/price/order on right
+  Future<bool> printWeightedItemLabel({
+    required String productName,
+    required double weightKg,
+    required double totalPrice,
+    required int orderId,
+    String currencySymbol = '₽',
+    int width = 50,
+    int height = 30,
+  }) {
+    throw UnimplementedError('printWeightedItemLabel() has not been implemented.');
+  }
+
   Future<bool> printImage(String base64Image) {
     throw UnimplementedError('printImage() has not been implemented.');
   }

@@ -148,6 +148,28 @@ class MethodChannelLpapiThermalPrinter extends LpapiThermalPrinterPlatform {
   }
 
   @override
+  Future<bool> printWeightedItemLabel({
+    required String productName,
+    required double weightKg,
+    required double totalPrice,
+    required int orderId,
+    String currencySymbol = '₽',
+    int width = 50,
+    int height = 30,
+  }) async {
+    final result = await methodChannel.invokeMethod<bool>('printWeightedItemLabel', {
+      'productName': productName,
+      'weightKg': weightKg,
+      'totalPrice': totalPrice,
+      'orderId': orderId,
+      'currencySymbol': currencySymbol,
+      'width': width,
+      'height': height,
+    });
+    return result ?? false;
+  }
+
+  @override
   Future<bool> printImage(String base64Image) async {
     final result = await methodChannel.invokeMethod<bool>('printImage', {
       'imageData': base64Image,

@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.0] - 2024-12-30
+
+### Added
+
+- **Weighted Item Label Printing** (`printWeightedItemLabel`): New method for printing pick/pack weighted item labels
+  - 50×30mm label format optimized for items sold by weight (apples, cheese, etc.)
+  - Left side: QR code (~24×24mm) encoding "PKG:{orderId}:{weight}" for verification
+  - Right side: Stacked text fields (product name, weight in kg, total price, order reference)
+  - Used during picking workflow - label is attached to plastic bag with weighed product
+  - Configurable currency symbol (default: ₽)
+
+### Features
+
+- `printWeightedItemLabel({productName, weightKg, totalPrice, orderId, currencySymbol?, width?, height?})` - Print weighted item labels for q-commerce pick/pack workflows
+
 ## [2.1.0] - 2024-12-29
 
 ### Added

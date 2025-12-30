@@ -176,6 +176,17 @@ class LpapiThermalPrinterPlugin: FlutterPlugin, MethodCallHandler {
         printLotLabel(lotId, sku, expiryDate, locationCode, width, height, result)
       }
 
+      "printWeightedItemLabel" -> {
+        val productName = call.argument<String>("productName") ?: ""
+        val weightKg = call.argument<Double>("weightKg") ?: 0.0
+        val totalPrice = call.argument<Double>("totalPrice") ?: 0.0
+        val orderId = call.argument<Int>("orderId") ?: 0
+        val currencySymbol = call.argument<String>("currencySymbol") ?: "₽"
+        val width = call.argument<Int>("width") ?: 50
+        val height = call.argument<Int>("height") ?: 30
+        printWeightedItemLabel(productName, weightKg, totalPrice, orderId, currencySymbol, width, height, result)
+      }
+
       "printImage" -> {
         val imageData = call.argument<String>("imageData")
         if (imageData != null) {
@@ -536,6 +547,73 @@ class LpapiThermalPrinterPlugin: FlutterPlugin, MethodCallHandler {
       result.success(true)
     } else {
       result.error("PRINT_FAILED", "Failed to print lot label", null)
+    }
+  }
+
+  /**
+   * Print a weighted item label for pick/pack (50x30mm format)
+   * Used for items sold by weight (apples, cheese, etc.)
+   * Layout:
+   *   Left: QR code (~24x24mm) containing PKG:{orderId}:{weight}
+   *   Right (stacked): Product name, weight, price, order reference
+   */
+  private fun printWeightedItemLabel(
+    productName: String,
+    weightKg: Double,
+    totalPrice: Double,
+    orderId: Int,
+    currencySymbol: String,
+    width: Int,
+    height: Int,
+    result: Result
+  ) {
+    val state = api.getPrinterState()
+    if (state != PrinterState.Connected && state != PrinterState.Connected2) {
+      result.error("NOT_CONNECTED", "Printer is not connected", null)
+      return
+    }
+
+    // Start drawing task (50mm x 30mm label)
+    api.startJob(width.toDouble(), height.toDouble(), 0)
+
+    // Layout calculations (all in mm)
+    val qrSize = 24.0
+    val qrX = 2.0
+    val qrY = (height - qrSize) / 2
+
+    val textX = qrX + qrSize + 2.0
+    val lineHeight = 5.5
+    var currentY = 3.0
+
+    // QR code content: PKG:{orderId}:{weight}
+    val weightStr = String.format("%.3f", weightKg)
+    val qrContent = "PKG:$orderId:$weightStr"
+    api.draw2DQRCode(qrContent, qrX, qrY, qrSize)
+
+    // Product name - largest text (5mm font)
+    api.drawText(productName, textX, currentY, 20.0, lineHeight + 1, 5.0)
+    currentY += lineHeight + 1.5
+
+    // Weight - prominent (5mm font)
+    val weightDisplay = "$weightStr kg"
+    api.drawText(weightDisplay, textX, currentY, 20.0, lineHeight, 5.0)
+    currentY += lineHeight + 0.5
+
+    // Price - prominent (5mm font)
+    val priceStr = String.format("%.2f", totalPrice)
+    val priceDisplay = "$currencySymbol $priceStr"
+    api.drawText(priceDisplay, textX, currentY, 20.0, lineHeight, 5.0)
+    currentY += lineHeight + 0.5
+
+    // Order reference - smaller (3mm font)
+    val orderRef = "Заказ #$orderId"
+    api.drawText(orderRef, textX, currentY, 20.0, lineHeight, 3.0)
+
+    // Commit job
+    if (api.commitJob()) {
+      result.success(true)
+    } else {
+      result.error("PRINT_FAILED", "Failed to print weighted item label", null)
     }
   }
 

@@ -144,6 +144,43 @@ class LpapiThermalPrinter {
     );
   }
 
+  /// Print a weighted item label for pick/pack workflow
+  ///
+  /// Layout (50x30mm):
+  /// - Left: QR code (~24x24mm) encoding "PKG:{orderId}:{weight}"
+  /// - Right (stacked):
+  ///   - Product name (largest font)
+  ///   - Weight in kg (e.g., "0.347 kg")
+  ///   - Total price (e.g., "₽ 86.75")
+  ///   - Order reference (e.g., "Заказ #4521")
+  ///
+  /// [productName] - Product name to display
+  /// [weightKg] - Weight in kilograms (e.g., 0.347)
+  /// [totalPrice] - Total price (weight × price per kg)
+  /// [orderId] - Order ID for reference
+  /// [currencySymbol] - Currency symbol (default: ₽)
+  /// [width] - Label width in mm (default: 50)
+  /// [height] - Label height in mm (default: 30)
+  Future<bool> printWeightedItemLabel({
+    required String productName,
+    required double weightKg,
+    required double totalPrice,
+    required int orderId,
+    String currencySymbol = '₽',
+    int width = 50,
+    int height = 30,
+  }) {
+    return LpapiThermalPrinterPlatform.instance.printWeightedItemLabel(
+      productName: productName,
+      weightKg: weightKg,
+      totalPrice: totalPrice,
+      orderId: orderId,
+      currencySymbol: currencySymbol,
+      width: width,
+      height: height,
+    );
+  }
+
   /// Print an image from base64 encoded data
   /// [base64Image] - Base64 encoded image data
   Future<bool> printImage(String base64Image) {
