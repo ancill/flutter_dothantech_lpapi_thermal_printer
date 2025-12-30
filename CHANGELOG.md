@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.0] - 2024-12-29
+
+### Added
+
+- **Inventory Lot Label Printing** (`printLotLabel`): New method for printing darkstore/warehouse inventory labels
+  - 50×30mm label format optimized for thermal printers @203dpi
+  - Left side: QR code (~24×24mm) encoding the lot ID for 2D scanner pickup
+  - Right side: Stacked text fields (SKU, expiry date, location code, lot ID)
+  - Configurable label dimensions via `width` and `height` parameters
+  - Optional fields: `expiryDate` and `locationCode`
+
+### Features
+
+- `printLotLabel({lotId, sku, expiryDate?, locationCode?, width?, height?})` - Print compound labels with QR code and text for inventory management and pick/pack workflows
+
 ## [2.0.1] - 2024-10-21
 
 ### Changed
