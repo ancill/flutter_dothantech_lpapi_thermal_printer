@@ -113,17 +113,18 @@ class LpapiThermalPrinter {
   /// Print an inventory lot label with QR code and text
   ///
   /// Layout (50x30mm):
-  /// - Left: QR code (~24x24mm) encoding [lotId]
+  /// - Left: QR code (~22x22mm) encoding [lotId]
   /// - Right (stacked):
+  ///   - Zone badge (if provided): ❄ FRZ / ❊ CHL / ☀ AMB
   ///   - SKU (largest font)
   ///   - EXP YYYY-MM-DD (if provided)
-  ///   - LOC ABC-12 (if provided)
-  ///   - LOT {last 10 chars of lotId} (smallest font)
+  ///   - LOC ABC-12 (if provided) + LOT {last 10 chars} (bottom row)
   ///
   /// [lotId] - Unique lot identifier (encoded in QR)
   /// [sku] - Product SKU code (displayed largest)
   /// [expiryDate] - Optional expiry date string (e.g., "2025-03-15")
   /// [locationCode] - Optional location code (e.g., "A-01-02")
+  /// [zone] - Optional temperature zone: "ambient", "chill", or "frozen"
   /// [width] - Label width in mm (default: 50)
   /// [height] - Label height in mm (default: 30)
   Future<bool> printLotLabel({
@@ -131,6 +132,7 @@ class LpapiThermalPrinter {
     required String sku,
     String? expiryDate,
     String? locationCode,
+    String? zone,
     int width = 50,
     int height = 30,
   }) {
@@ -139,6 +141,7 @@ class LpapiThermalPrinter {
       sku: sku,
       expiryDate: expiryDate,
       locationCode: locationCode,
+      zone: zone,
       width: width,
       height: height,
     );

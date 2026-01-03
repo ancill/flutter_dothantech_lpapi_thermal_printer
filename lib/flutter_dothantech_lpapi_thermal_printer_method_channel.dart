@@ -133,6 +133,7 @@ class MethodChannelLpapiThermalPrinter extends LpapiThermalPrinterPlatform {
     required String sku,
     String? expiryDate,
     String? locationCode,
+    String? zone,
     int width = 50,
     int height = 30,
   }) async {
@@ -141,6 +142,7 @@ class MethodChannelLpapiThermalPrinter extends LpapiThermalPrinterPlatform {
       'sku': sku,
       'expiryDate': expiryDate,
       'locationCode': locationCode,
+      'zone': zone,
       'width': width,
       'height': height,
     });

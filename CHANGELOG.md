@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.0] - 2025-01-03
+
+### Added
+
+- **Temperature Zone Support for Lot Labels** (`printLotLabel`): Added `zone` parameter to display storage requirements
+  - Supports three zones: `ambient`, `chill`, `frozen`
+  - Zone badge displayed prominently at top of text area: `[* FRZ]`, `[+ CHL]`, `[o AMB]`
+  - Visual icons approximated for thermal printer compatibility (❄→*, ❊→+, ☀→o)
+
+### Changed
+
+- **Redesigned Lot Label Layout** for better visual hierarchy and space utilization
+  - QR code reduced from 24mm to 22mm for more text space
+  - Zone badge shown first when provided
+  - SKU/product name allows 2-line wrapping
+  - Location code and LOT ID now share bottom row for better space efficiency
+  - Improved text sizing and spacing throughout
+
+### Features
+
+- `printLotLabel({lotId, sku, expiryDate?, locationCode?, zone?, width?, height?})` - Now accepts optional `zone` parameter ("ambient", "chill", or "frozen")
+
 ## [2.2.0] - 2024-12-30
 
 ### Added

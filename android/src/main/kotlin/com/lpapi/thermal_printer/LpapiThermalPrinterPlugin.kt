@@ -171,9 +171,10 @@ class LpapiThermalPrinterPlugin: FlutterPlugin, MethodCallHandler {
         val sku = call.argument<String>("sku") ?: ""
         val expiryDate = call.argument<String>("expiryDate")
         val locationCode = call.argument<String>("locationCode")
+        val zone = call.argument<String>("zone")
         val width = call.argument<Int>("width") ?: 50
         val height = call.argument<Int>("height") ?: 30
-        printLotLabel(lotId, sku, expiryDate, locationCode, width, height, result)
+        printLotLabel(lotId, sku, expiryDate, locationCode, zone, width, height, result)
       }
 
       "printWeightedItemLabel" -> {
@@ -482,14 +483,15 @@ class LpapiThermalPrinterPlugin: FlutterPlugin, MethodCallHandler {
   /**
    * Print an inventory lot label (50x30mm format)
    * Layout:
-   *   Left: QR code (~24x24mm) containing lotId
-   *   Right (stacked): SKU (largest), EXP, LOC (optional), LOT (small)
+   *   Left: QR code (~22x22mm) containing lotId
+   *   Right (stacked): Zone badge, SKU (largest), EXP, LOC+LOT (bottom row)
    */
   private fun printLotLabel(
     lotId: String,
     sku: String,
     expiryDate: String?,
     locationCode: String?,
+    zone: String?,
     width: Int,
     height: Int,
     result: Result
@@ -504,8 +506,8 @@ class LpapiThermalPrinterPlugin: FlutterPlugin, MethodCallHandler {
     api.startJob(width.toDouble(), height.toDouble(), 0)
 
     // Layout calculations (all in mm)
-    // QR code on left side: ~24mm, positioned with 2mm margin
-    val qrSize = 24.0
+    // QR code on left side: ~22mm (slightly smaller for more text room)
+    val qrSize = 22.0
     val qrX = 2.0
     val qrY = (height - qrSize) / 2  // Vertically centered
 
@@ -517,30 +519,42 @@ class LpapiThermalPrinterPlugin: FlutterPlugin, MethodCallHandler {
     api.draw2DQRCode(lotId, qrX, qrY, qrSize)
 
     // Calculate text positions
-    // Available height: ~28mm (30mm - 2mm margins)
-    // Divide among 3-4 lines
-    val lineHeight = 5.5
-    var currentY = 3.0
+    val lineHeight = 5.0
+    var currentY = 2.0
 
-    // SKU - largest text (6mm font)
-    api.drawText(sku, textX, currentY, textWidth, lineHeight + 1, 6.0)
-    currentY += lineHeight + 2
+    // Zone badge (if provided) - with icon and abbreviation
+    if (!zone.isNullOrEmpty()) {
+      val zoneDisplay = when (zone.lowercase()) {
+        "frozen" -> "* FRZ"   // ❄ approximated as * for thermal printer
+        "chill" -> "+ CHL"    // ❊ approximated as +
+        "ambient" -> "o AMB"  // ☀ approximated as o
+        else -> zone.uppercase().take(3)
+      }
+      // Draw zone in a box-like style (text with brackets)
+      api.drawText("[$zoneDisplay]", textX, currentY, textWidth, lineHeight, 4.0)
+      currentY += lineHeight + 1.0
+    }
 
-    // Expiry date (if provided)
+    // SKU - largest text (5mm font, allow 2 lines)
+    api.drawText(sku, textX, currentY, textWidth, lineHeight * 2, 5.0)
+    currentY += lineHeight * 1.5 + 1.0
+
+    // Expiry date (if provided) - important for FEFO
     if (!expiryDate.isNullOrEmpty()) {
-      api.drawText("EXP $expiryDate", textX, currentY, textWidth, lineHeight, 4.0)
+      api.drawText("EXP $expiryDate", textX, currentY, textWidth, lineHeight, 3.5)
       currentY += lineHeight + 0.5
     }
 
-    // Location code (optional)
-    if (!locationCode.isNullOrEmpty()) {
-      api.drawText("LOC $locationCode", textX, currentY, textWidth, lineHeight, 4.0)
-      currentY += lineHeight + 0.5
-    }
-
-    // LOT ID - smaller text at bottom
+    // Bottom row: Location code + LOT ID
     val shortLotId = if (lotId.length > 10) lotId.takeLast(10) else lotId
-    api.drawText("LOT $shortLotId", textX, currentY, textWidth, lineHeight, 3.0)
+    if (!locationCode.isNullOrEmpty()) {
+      // Draw both LOC and LOT on same row
+      api.drawText("LOC $locationCode", textX, currentY, textWidth / 2, lineHeight, 3.0)
+      api.drawText("LOT $shortLotId", textX + textWidth / 2, currentY, textWidth / 2, lineHeight, 3.0)
+    } else {
+      // Just LOT ID
+      api.drawText("LOT $shortLotId", textX, currentY, textWidth, lineHeight, 3.0)
+    }
 
     // Commit job
     if (api.commitJob()) {
