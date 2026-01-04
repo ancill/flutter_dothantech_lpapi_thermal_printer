@@ -511,9 +511,9 @@ class LpapiThermalPrinterPlugin: FlutterPlugin, MethodCallHandler {
     // Layout calculations (all in mm)
     val margin = 2.0
 
-    // QR code: ~22mm centered (compact but scannable)
+    // QR code: ~22mm left-aligned (matches text below)
     val qrSize = 22.0
-    val qrX = (width - qrSize) / 2  // Centered horizontally
+    val qrX = margin  // Left aligned like text
     val qrY = margin
 
     // Draw QR code containing LOT ID

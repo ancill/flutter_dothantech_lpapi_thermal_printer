@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.6.3] - 2025-01-04
+
+### Changed
+
+- **Left-aligned QR**: QR code now left-aligned to match text below
+
 ## [2.6.2] - 2025-01-04
 
 ### Changed
