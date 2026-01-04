@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.6.0] - 2025-01-04
+
+### Changed
+
+- **Portrait Lot Label Format** (`printLotLabel`): Updated to 40×55mm portrait format
+  - Label size changed from 55×30mm landscape to 40×55mm portrait
+  - QR code (~27mm) centered on top half for easy scanning
+  - LOT ID with large font (7mm) below QR
+  - SKU with large font (5mm) below LOT
+  - Bottom info line: shortened date (MM-DD), location code, zone badge
+  - Default dimensions updated: `width=40`, `height=55`
+
+### Layout
+
+```
+┌────────────────────────┐
+│                        │
+│      ┌────────┐        │
+│      │   QR   │        │
+│      │  CODE  │        │
+│      └────────┘        │
+│                        │
+│  LOT 584               │
+│  SKU-12345             │
+│  01-05  A-03-01  FRZ   │
+└────────────────────────┘
+```
+
 ## [2.5.0] - 2025-01-04
 
 ### Changed
