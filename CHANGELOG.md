@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.0] - 2025-01-04
+
+### Changed
+
+- **Compact Lot Label Format** (`printLotLabel`): Updated to 55×30mm landscape format for smaller labels
+  - Label size changed from 70×50mm to 55×30mm (compact landscape orientation)
+  - QR code reduced from 40mm to 22mm to fit smaller label
+  - LOT ID displayed with large font (6mm) on right side of QR
+  - SKU displayed with large font (5mm) below LOT ID
+  - Bottom info (EXP, LOC, Zone) now dynamically spreads based on available items
+  - No divider line - cleaner layout
+  - Default dimensions updated: `width=55`, `height=30`
+
+### Layout
+
+```
+┌─────────────────────────────────────────────────────┐
+│ ┌──────────┐  LOT 584                               │
+│ │          │                                        │
+│ │  QR CODE │  SKU-12345                             │
+│ │          │                                        │
+│ └──────────┘                                        │
+│ EXP 2025-01-05    LOC A-03-01    * FRZ              │
+└─────────────────────────────────────────────────────┘
+```
+
 ## [2.4.0] - 2025-01-04
 
 ### Changed

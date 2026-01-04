@@ -134,7 +134,7 @@ class MethodChannelLpapiThermalPrinter extends LpapiThermalPrinterPlatform {
     String? expiryDate,
     String? locationCode,
     String? zone,
-    int width = 50,
+    int width = 55,
     int height = 30,
   }) async {
     final result = await methodChannel.invokeMethod<bool>('printLotLabel', {
