@@ -429,6 +429,13 @@ class LpapiThermalPrinterPlugin: FlutterPlugin, MethodCallHandler {
     }
   }
 
+  /**
+   * Print a 1D barcode product label (50x40mm landscape format)
+   * Layout:
+   *   Top: Product text
+   *   Middle: 1D Barcode (centered, compact)
+   *   Bottom: Barcode text
+   */
   private fun print1DBarcode(text: String, barcode: String, width: Int, height: Int, result: Result) {
     val state = api.getPrinterState()
     if (state != PrinterState.Connected && state != PrinterState.Connected2) {
@@ -436,17 +443,29 @@ class LpapiThermalPrinterPlugin: FlutterPlugin, MethodCallHandler {
       return
     }
 
-    // Start drawing task
+    // Start drawing task (50mm x 40mm landscape label)
     api.startJob(width.toDouble(), height.toDouble(), 0)
 
-    // Draw text if provided
+    // Layout calculations (all in mm)
+    val margin = 2.0
+    val textWidth = width - 2 * margin
+    var currentY = margin
+
+    // Product text on top - BIG font (5mm) if provided
     if (text.isNotEmpty()) {
-      api.drawText(text, 4.0, 4.0, (width - 8).toDouble(), 20.0, 4.0)
+      api.drawText(text, margin, currentY, textWidth, 6.0, 5.0)
+      currentY += 7.0
+    } else {
+      currentY += 2.0
     }
 
-    // Draw barcode
-    val barcodeY = if (text.isNotEmpty()) 25.0 else 10.0
-    api.draw1DBarcode(barcode, BarcodeType.AUTO, 4.0, barcodeY, (width - 8).toDouble(), 15.0, 3.0)
+    // 1D Barcode - compact but scannable (~15mm height)
+    val barcodeHeight = 15.0
+    api.draw1DBarcode(barcode, BarcodeType.AUTO, margin, currentY, textWidth, barcodeHeight, 3.0)
+    currentY += barcodeHeight + 1.0
+
+    // Barcode text below - medium font (3.5mm)
+    api.drawText(barcode, margin, currentY, textWidth, 5.0, 3.5)
 
     // Commit job
     if (api.commitJob()) {

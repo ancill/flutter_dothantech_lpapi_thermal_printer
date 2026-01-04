@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.6.4] - 2025-01-04
+
+### Changed
+
+- **1D Barcode Label Format**: Updated to landscape 50×40mm with compact proportions
+  - Product text: 5mm font at top
+  - Barcode: 15mm height (compact but scannable)
+  - Barcode text: 3.5mm font at bottom
+  - Consistent 2mm margins matching portrait lot labels
+  - Default dimensions: `width=50`, `height=40`
+
 ## [2.6.3] - 2025-01-04
 
 ### Changed

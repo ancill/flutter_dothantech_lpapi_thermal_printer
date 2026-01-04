@@ -101,8 +101,8 @@ class MethodChannelLpapiThermalPrinter extends LpapiThermalPrinterPlatform {
   Future<bool> print1DBarcode(
     String barcode, {
     String text = '',
-    int width = 48,
-    int height = 50,
+    int width = 50,
+    int height = 40,
   }) async {
     final result = await methodChannel.invokeMethod<bool>('print1DBarcode', {
       'barcode': barcode,

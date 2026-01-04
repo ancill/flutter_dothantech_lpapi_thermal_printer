@@ -75,16 +75,22 @@ class LpapiThermalPrinter {
     );
   }
 
-  /// Print 1D barcode with optional text
+  /// Print a 1D barcode product label (50x40mm landscape format)
+  ///
+  /// Layout:
+  /// - Top: Product text (big font)
+  /// - Middle: 1D Barcode (compact, scannable)
+  /// - Bottom: Barcode text
+  ///
   /// [barcode] - The barcode data to encode
-  /// [text] - Optional text to print above the barcode
-  /// [width] - Label width in mm (default: 48)
-  /// [height] - Label height in mm (default: 50)
+  /// [text] - Optional product name/description
+  /// [width] - Label width in mm (default: 50)
+  /// [height] - Label height in mm (default: 40)
   Future<bool> print1DBarcode(
     String barcode, {
     String text = '',
-    int width = 48,
-    int height = 50,
+    int width = 50,
+    int height = 40,
   }) {
     return LpapiThermalPrinterPlatform.instance.print1DBarcode(
       barcode,
