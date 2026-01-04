@@ -172,8 +172,8 @@ class LpapiThermalPrinterPlugin: FlutterPlugin, MethodCallHandler {
         val expiryDate = call.argument<String>("expiryDate")
         val locationCode = call.argument<String>("locationCode")
         val zone = call.argument<String>("zone")
-        val width = call.argument<Int>("width") ?: 50
-        val height = call.argument<Int>("height") ?: 30
+        val width = call.argument<Int>("width") ?: 70
+        val height = call.argument<Int>("height") ?: 50
         printLotLabel(lotId, sku, expiryDate, locationCode, zone, width, height, result)
       }
 
@@ -481,10 +481,13 @@ class LpapiThermalPrinterPlugin: FlutterPlugin, MethodCallHandler {
   }
 
   /**
-   * Print an inventory lot label (50x30mm format)
+   * Print an inventory lot label (70x50mm landscape format)
    * Layout:
-   *   Left: QR code (~22x22mm) containing lotId
-   *   Right (stacked): Zone badge, SKU (largest), EXP, LOC+LOT (bottom row)
+   *   Top section:
+   *     Left: QR code (~40x40mm) containing lotId
+   *     Right: LOT ID (big font), SKU (big font)
+   *   Bottom section (after divider):
+   *     EXP date | LOC code | Zone badge
    */
   private fun printLotLabel(
     lotId: String,
@@ -502,27 +505,55 @@ class LpapiThermalPrinterPlugin: FlutterPlugin, MethodCallHandler {
       return
     }
 
-    // Start drawing task (50mm x 30mm label)
+    // Start drawing task (70mm x 50mm landscape label)
     api.startJob(width.toDouble(), height.toDouble(), 0)
 
     // Layout calculations (all in mm)
-    // QR code on left side: ~22mm (slightly smaller for more text room)
-    val qrSize = 22.0
-    val qrX = 2.0
-    val qrY = (height - qrSize) / 2  // Vertically centered
+    val margin = 2.0
 
-    // Text area starts after QR + 2mm gap
-    val textX = qrX + qrSize + 2.0
-    val textWidth = width - textX - 2.0  // Right margin 2mm
+    // QR code on left side: ~40mm (large for easy scanning, fits in 50mm height)
+    val qrSize = 40.0
+    val qrX = margin
+    val qrY = margin  // Top aligned
+
+    // Text area for LOT and SKU (right of QR)
+    val textX = qrX + qrSize + 3.0
+    val textWidth = width - textX - margin
 
     // Draw QR code containing LOT ID
     api.draw2DQRCode(lotId, qrX, qrY, qrSize)
 
-    // Calculate text positions
-    val lineHeight = 5.0
-    var currentY = 2.0
+    // LOT ID - BIG font (8mm) on right of QR
+    val shortLotId = if (lotId.startsWith("LOT:")) lotId.substring(4) else lotId
+    val lotY = qrY + 5.0
+    api.drawText("LOT $shortLotId", textX, lotY, textWidth, 12.0, 8.0)
 
-    // Zone badge (if provided) - with icon and abbreviation
+    // SKU - BIG font (6mm) below LOT
+    val skuY = lotY + 16.0
+    api.drawText(sku, textX, skuY, textWidth, 14.0, 6.0)
+
+    // Divider line position (below QR code area)
+    val dividerY = qrY + qrSize + 2.0
+
+    // Draw divider line
+    api.drawLine(margin, dividerY, width - margin, dividerY, 0.3)
+
+    // Bottom section: EXP, LOC, Zone (below divider)
+    val bottomY = dividerY + 2.0
+    val bottomLineHeight = 5.0
+    val sectionWidth = (width - 2 * margin) / 3
+
+    // Expiry date (left)
+    if (!expiryDate.isNullOrEmpty()) {
+      api.drawText("EXP $expiryDate", margin, bottomY, sectionWidth, bottomLineHeight, 3.5)
+    }
+
+    // Location code (center)
+    if (!locationCode.isNullOrEmpty()) {
+      api.drawText("LOC $locationCode", margin + sectionWidth, bottomY, sectionWidth, bottomLineHeight, 3.5)
+    }
+
+    // Zone badge (right)
     if (!zone.isNullOrEmpty()) {
       val zoneDisplay = when (zone.lowercase()) {
         "frozen" -> "* FRZ"   // ❄ approximated as * for thermal printer
@@ -530,30 +561,7 @@ class LpapiThermalPrinterPlugin: FlutterPlugin, MethodCallHandler {
         "ambient" -> "o AMB"  // ☀ approximated as o
         else -> zone.uppercase().take(3)
       }
-      // Draw zone in a box-like style (text with brackets)
-      api.drawText("[$zoneDisplay]", textX, currentY, textWidth, lineHeight, 4.0)
-      currentY += lineHeight + 1.0
-    }
-
-    // SKU - largest text (5mm font, allow 2 lines)
-    api.drawText(sku, textX, currentY, textWidth, lineHeight * 2, 5.0)
-    currentY += lineHeight * 1.5 + 1.0
-
-    // Expiry date (if provided) - important for FEFO
-    if (!expiryDate.isNullOrEmpty()) {
-      api.drawText("EXP $expiryDate", textX, currentY, textWidth, lineHeight, 3.5)
-      currentY += lineHeight + 0.5
-    }
-
-    // Bottom row: Location code + LOT ID
-    val shortLotId = if (lotId.length > 10) lotId.takeLast(10) else lotId
-    if (!locationCode.isNullOrEmpty()) {
-      // Draw both LOC and LOT on same row
-      api.drawText("LOC $locationCode", textX, currentY, textWidth / 2, lineHeight, 3.0)
-      api.drawText("LOT $shortLotId", textX + textWidth / 2, currentY, textWidth / 2, lineHeight, 3.0)
-    } else {
-      // Just LOT ID
-      api.drawText("LOT $shortLotId", textX, currentY, textWidth, lineHeight, 3.0)
+      api.drawText("[$zoneDisplay]", margin + sectionWidth * 2, bottomY, sectionWidth, bottomLineHeight, 3.5)
     }
 
     // Commit job
