@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.6.2] - 2025-01-04
+
+### Changed
+
+- **Compact Label Size**: Reduced label height from 55mm to 50mm
+  - QR code reduced from 27mm to 22mm (still easily scannable)
+  - LOT font reduced from 7mm to 6mm
+  - Tighter spacing for more compact layout
+  - Default dimensions: `width=40`, `height=50`
+
 ## [2.6.1] - 2025-01-04
 
 ### Fixed

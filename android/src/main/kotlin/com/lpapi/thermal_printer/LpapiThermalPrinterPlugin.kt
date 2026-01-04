@@ -505,14 +505,14 @@ class LpapiThermalPrinterPlugin: FlutterPlugin, MethodCallHandler {
     }
 
     // Start drawing task with 90° rotation for portrait mode
-    // Physical label: 55x40mm, rotated to print as 40x55mm portrait
+    // Physical label: 50x40mm, rotated to print as 40x50mm portrait
     api.startJob(width.toDouble(), height.toDouble(), 90)
 
     // Layout calculations (all in mm)
     val margin = 2.0
 
-    // QR code on top half: ~27mm centered (fits nicely in 40mm width)
-    val qrSize = 27.0
+    // QR code: ~22mm centered (compact but scannable)
+    val qrSize = 22.0
     val qrX = (width - qrSize) / 2  // Centered horizontally
     val qrY = margin
 
@@ -520,18 +520,18 @@ class LpapiThermalPrinterPlugin: FlutterPlugin, MethodCallHandler {
     api.draw2DQRCode(lotId, qrX, qrY, qrSize)
 
     // Text area below QR (starting after QR + small gap)
-    val textY = qrY + qrSize + 2.0
+    val textY = qrY + qrSize + 1.5
     val textWidth = width - 2 * margin
     var currentY = textY
 
-    // LOT ID - BIG font (7mm)
+    // LOT ID - BIG font (6mm)
     val shortLotId = if (lotId.startsWith("LOT:")) lotId.substring(4) else lotId
-    api.drawText("LOT $shortLotId", margin, currentY, textWidth, 9.0, 7.0)
-    currentY += 9.0
+    api.drawText("LOT $shortLotId", margin, currentY, textWidth, 8.0, 6.0)
+    currentY += 8.0
 
     // SKU - BIG font (5mm)
-    api.drawText(sku, margin, currentY, textWidth, 7.0, 5.0)
-    currentY += 7.0
+    api.drawText(sku, margin, currentY, textWidth, 6.0, 5.0)
+    currentY += 6.0
 
     // Bottom info line: EXP, LOC, Zone
     val infoItems = mutableListOf<String>()

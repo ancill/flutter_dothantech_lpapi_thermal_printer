@@ -74,7 +74,7 @@ abstract class LpapiThermalPrinterPlatform extends PlatformInterface {
   }
 
   /// Print an inventory lot label with QR code and text
-  /// Layout (40x55mm portrait): QR on top (~27mm), LOT+SKU big below, other info at bottom
+  /// Layout (40x50mm portrait): QR on top (~22mm), LOT+SKU big below, other info at bottom
   Future<bool> printLotLabel({
     required String lotId,
     required String sku,
@@ -82,7 +82,7 @@ abstract class LpapiThermalPrinterPlatform extends PlatformInterface {
     String? locationCode,
     String? zone,
     int width = 40,
-    int height = 55,
+    int height = 50,
   }) {
     throw UnimplementedError('printLotLabel() has not been implemented.');
   }
