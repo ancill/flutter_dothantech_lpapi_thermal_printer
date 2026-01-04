@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.6.1] - 2025-01-04
+
+### Fixed
+
+- **Portrait Mode Rotation**: Added 90° rotation to `printLotLabel` so physical 55×40mm labels print correctly in portrait orientation
+  - Labels now print with QR on top and text below as intended
+  - Physical label feeds as 55×40mm landscape but content is rotated for portrait display
+
 ## [2.6.0] - 2025-01-04
 
 ### Changed

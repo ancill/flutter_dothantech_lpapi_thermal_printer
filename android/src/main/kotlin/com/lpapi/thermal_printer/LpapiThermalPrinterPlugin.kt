@@ -485,6 +485,8 @@ class LpapiThermalPrinterPlugin: FlutterPlugin, MethodCallHandler {
    * Layout:
    *   Top half: QR code (~27x27mm) centered
    *   Bottom half: LOT ID, SKU, other info stacked
+   *
+   * Physical label is 55x40mm fed landscape, rotated 90° to print portrait
    */
   private fun printLotLabel(
     lotId: String,
@@ -502,8 +504,9 @@ class LpapiThermalPrinterPlugin: FlutterPlugin, MethodCallHandler {
       return
     }
 
-    // Start drawing task (40mm x 55mm portrait label)
-    api.startJob(width.toDouble(), height.toDouble(), 0)
+    // Start drawing task with 90° rotation for portrait mode
+    // Physical label: 55x40mm, rotated to print as 40x55mm portrait
+    api.startJob(width.toDouble(), height.toDouble(), 90)
 
     // Layout calculations (all in mm)
     val margin = 2.0
