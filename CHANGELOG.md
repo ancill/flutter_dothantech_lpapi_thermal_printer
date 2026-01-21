@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.7.0] - 2026-01-21
+
+### Added
+
+- **New `printBagLabel` method**: Dedicated bag label printing for packing workflow (50×50mm format)
+  - Zone header with inverted text (black background, white text)
+  - Order info display (e.g., "Order #4")
+  - Bag number display (e.g., "Bag #2")
+  - Centered 1D barcode (Code128)
+  - Barcode text below barcode
+  - Timestamp at bottom
+  - Matches the `BagLabelPreview` widget layout from the Flutter app
+  - Default dimensions: `width=50`, `height=50`
+
 ## [2.6.4] - 2025-01-04
 
 ### Changed

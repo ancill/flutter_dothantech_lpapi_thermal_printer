@@ -188,6 +188,17 @@ class LpapiThermalPrinterPlugin: FlutterPlugin, MethodCallHandler {
         printWeightedItemLabel(productName, weightKg, totalPrice, orderId, currencySymbol, width, height, result)
       }
 
+      "printBagLabel" -> {
+        val barcode = call.argument<String>("barcode") ?: ""
+        val orderInfo = call.argument<String>("orderInfo") ?: ""
+        val zone = call.argument<String>("zone") ?: ""
+        val bagNumber = call.argument<Int>("bagNumber") ?: 1
+        val timestamp = call.argument<String>("timestamp") ?: ""
+        val width = call.argument<Int>("width") ?: 50
+        val height = call.argument<Int>("height") ?: 50
+        printBagLabel(barcode, orderInfo, zone, bagNumber, timestamp, width, height, result)
+      }
+
       "printImage" -> {
         val imageData = call.argument<String>("imageData")
         if (imageData != null) {
@@ -650,6 +661,81 @@ class LpapiThermalPrinterPlugin: FlutterPlugin, MethodCallHandler {
       result.success(true)
     } else {
       result.error("PRINT_FAILED", "Failed to print weighted item label", null)
+    }
+  }
+
+  /**
+   * Print a bag label for packing workflow (50x50mm format)
+   * Matches BagLabelPreview widget layout:
+   *   - Zone header (inverted: filled rect with white text)
+   *   - Order info (e.g., "Order #4")
+   *   - Bag number (e.g., "Bag #2")
+   *   - 1D Barcode (centered)
+   *   - Barcode text
+   *   - Timestamp
+   */
+  private fun printBagLabel(
+    barcode: String,
+    orderInfo: String,
+    zone: String,
+    bagNumber: Int,
+    timestamp: String,
+    width: Int,
+    height: Int,
+    result: Result
+  ) {
+    val state = api.getPrinterState()
+    if (state != PrinterState.Connected && state != PrinterState.Connected2) {
+      result.error("NOT_CONNECTED", "Printer is not connected", null)
+      return
+    }
+
+    // Start drawing task (50mm x 50mm label)
+    api.startJob(width.toDouble(), height.toDouble(), 0)
+
+    // Layout calculations (all in mm)
+    val margin = 3.0
+    val contentWidth = width - 2 * margin
+    var currentY = margin
+
+    // === Zone Header (inverted: black background, white text) ===
+    val headerHeight = 8.0
+    val headerText = zone.uppercase()
+
+    // Draw filled black rectangle for header background
+    api.drawRectangle(margin, currentY, contentWidth, headerHeight, 0.5, true)
+
+    // Draw white text on black background (inverted)
+    // LPAPI drawText with negative fontHeight for inverted
+    api.drawText(headerText, margin + 2.0, currentY + 1.5, contentWidth - 4.0, headerHeight - 2.0, 5.0, 0, 0x11, true)
+    currentY += headerHeight + 3.0
+
+    // === Order Info (centered, bold) ===
+    api.drawText(orderInfo, margin, currentY, contentWidth, 6.0, 5.0, 0, 0x11)
+    currentY += 7.0
+
+    // === Bag Number (centered, lighter) ===
+    val bagText = "Bag #$bagNumber"
+    api.drawText(bagText, margin, currentY, contentWidth, 5.0, 4.0, 0, 0x11)
+    currentY += 6.0
+
+    // === 1D Barcode (centered) ===
+    val barcodeHeight = 12.0
+    api.draw1DBarcode(barcode, BarcodeType.CODE128, margin, currentY, contentWidth, barcodeHeight, 2.5)
+    currentY += barcodeHeight + 2.0
+
+    // === Barcode Text (centered, monospace-style) ===
+    api.drawText(barcode, margin, currentY, contentWidth, 4.0, 3.0, 0, 0x11)
+    currentY += 5.0
+
+    // === Timestamp (centered, small, gray-ish) ===
+    api.drawText(timestamp, margin, currentY, contentWidth, 4.0, 2.5, 0, 0x11)
+
+    // Commit job
+    if (api.commitJob()) {
+      result.success(true)
+    } else {
+      result.error("PRINT_FAILED", "Failed to print bag label", null)
     }
   }
 

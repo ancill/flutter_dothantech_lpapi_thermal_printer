@@ -172,6 +172,28 @@ class MethodChannelLpapiThermalPrinter extends LpapiThermalPrinterPlatform {
   }
 
   @override
+  Future<bool> printBagLabel({
+    required String barcode,
+    required String orderInfo,
+    required String zone,
+    required int bagNumber,
+    required String timestamp,
+    int width = 50,
+    int height = 50,
+  }) async {
+    final result = await methodChannel.invokeMethod<bool>('printBagLabel', {
+      'barcode': barcode,
+      'orderInfo': orderInfo,
+      'zone': zone,
+      'bagNumber': bagNumber,
+      'timestamp': timestamp,
+      'width': width,
+      'height': height,
+    });
+    return result ?? false;
+  }
+
+  @override
   Future<bool> printImage(String base64Image) async {
     final result = await methodChannel.invokeMethod<bool>('printImage', {
       'imageData': base64Image,

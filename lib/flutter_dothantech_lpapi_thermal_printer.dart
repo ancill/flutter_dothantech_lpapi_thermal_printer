@@ -186,6 +186,43 @@ class LpapiThermalPrinter {
     );
   }
 
+  /// Print a bag label for packing workflow (50×50mm format)
+  ///
+  /// Matches the BagLabelPreview widget layout:
+  /// - Zone header (inverted: black background, white text)
+  /// - Order info (e.g., "Order #4")
+  /// - Bag number (e.g., "Bag #2")
+  /// - 1D Barcode
+  /// - Barcode text (e.g., "BAG-1-1-AMB-02")
+  /// - Timestamp (e.g., "21/01/2026 16:18")
+  ///
+  /// [barcode] - The bag barcode string
+  /// [orderInfo] - Order display text (e.g., "Order #4")
+  /// [zone] - Temperature zone (AMBIENT, CHILL, FROZEN)
+  /// [bagNumber] - Bag number in the order
+  /// [timestamp] - Formatted timestamp string
+  /// [width] - Label width in mm (default: 50)
+  /// [height] - Label height in mm (default: 50)
+  Future<bool> printBagLabel({
+    required String barcode,
+    required String orderInfo,
+    required String zone,
+    required int bagNumber,
+    required String timestamp,
+    int width = 50,
+    int height = 50,
+  }) {
+    return LpapiThermalPrinterPlatform.instance.printBagLabel(
+      barcode: barcode,
+      orderInfo: orderInfo,
+      zone: zone,
+      bagNumber: bagNumber,
+      timestamp: timestamp,
+      width: width,
+      height: height,
+    );
+  }
+
   /// Print an image from base64 encoded data
   /// [base64Image] - Base64 encoded image data
   Future<bool> printImage(String base64Image) {

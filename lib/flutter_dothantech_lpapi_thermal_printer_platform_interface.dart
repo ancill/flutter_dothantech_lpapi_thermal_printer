@@ -103,6 +103,26 @@ abstract class LpapiThermalPrinterPlatform extends PlatformInterface {
     throw UnimplementedError('printWeightedItemLabel() has not been implemented.');
   }
 
+  /// Print a bag label for packing workflow
+  /// Layout (50x50mm):
+  ///   - Zone header (inverted: black bg, white text)
+  ///   - Order info (Order #X)
+  ///   - Bag number (Bag #X)
+  ///   - 1D Barcode
+  ///   - Barcode text
+  ///   - Timestamp
+  Future<bool> printBagLabel({
+    required String barcode,
+    required String orderInfo,
+    required String zone,
+    required int bagNumber,
+    required String timestamp,
+    int width = 50,
+    int height = 50,
+  }) {
+    throw UnimplementedError('printBagLabel() has not been implemented.');
+  }
+
   Future<bool> printImage(String base64Image) {
     throw UnimplementedError('printImage() has not been implemented.');
   }
