@@ -698,25 +698,24 @@ class LpapiThermalPrinterPlugin: FlutterPlugin, MethodCallHandler {
     val contentWidth = width - 2 * margin
     var currentY = margin
 
-    // === Zone Header (inverted: black background, white text) ===
+    // === Zone Header (with border - Android SDK doesn't support filled rectangles) ===
     val headerHeight = 8.0
     val headerText = zone.uppercase()
 
-    // Draw filled black rectangle for header background
-    api.drawRectangle(margin, currentY, contentWidth, headerHeight, 0.5, true)
+    // Draw rectangle border for header (Android SDK: 5 params, no fill support)
+    api.drawRectangle(margin, currentY, contentWidth, headerHeight, 0.5)
 
-    // Draw white text on black background (inverted)
-    // LPAPI drawText with negative fontHeight for inverted
-    api.drawText(headerText, margin + 2.0, currentY + 1.5, contentWidth - 4.0, headerHeight - 2.0, 5.0, 0, 0x11, true)
+    // Draw header text (Android SDK: 6 params - text, x, y, width, height, fontHeight)
+    api.drawText(headerText, margin + 2.0, currentY + 1.5, contentWidth - 4.0, headerHeight - 2.0, 5.0)
     currentY += headerHeight + 3.0
 
-    // === Order Info (centered, bold) ===
-    api.drawText(orderInfo, margin, currentY, contentWidth, 6.0, 5.0, 0, 0x11)
+    // === Order Info ===
+    api.drawText(orderInfo, margin, currentY, contentWidth, 6.0, 5.0)
     currentY += 7.0
 
-    // === Bag Number (centered, lighter) ===
+    // === Bag Number ===
     val bagText = "Bag #$bagNumber"
-    api.drawText(bagText, margin, currentY, contentWidth, 5.0, 4.0, 0, 0x11)
+    api.drawText(bagText, margin, currentY, contentWidth, 5.0, 4.0)
     currentY += 6.0
 
     // === 1D Barcode (centered) ===
@@ -724,12 +723,12 @@ class LpapiThermalPrinterPlugin: FlutterPlugin, MethodCallHandler {
     api.draw1DBarcode(barcode, BarcodeType.CODE128, margin, currentY, contentWidth, barcodeHeight, 2.5)
     currentY += barcodeHeight + 2.0
 
-    // === Barcode Text (centered, monospace-style) ===
-    api.drawText(barcode, margin, currentY, contentWidth, 4.0, 3.0, 0, 0x11)
+    // === Barcode Text ===
+    api.drawText(barcode, margin, currentY, contentWidth, 4.0, 3.0)
     currentY += 5.0
 
-    // === Timestamp (centered, small, gray-ish) ===
-    api.drawText(timestamp, margin, currentY, contentWidth, 4.0, 2.5, 0, 0x11)
+    // === Timestamp ===
+    api.drawText(timestamp, margin, currentY, contentWidth, 4.0, 2.5)
 
     // Commit job
     if (api.commitJob()) {

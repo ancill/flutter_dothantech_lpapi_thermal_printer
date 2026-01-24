@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.7.1] - 2026-01-24
+
+### Fixed
+
+- **Android SDK Compatibility**: Fixed Kotlin compilation errors in `printBagLabel` method
+  - Removed unsupported `isFilled` parameter from `drawRectangle()` call (Android SDK takes 5 params, not 6)
+  - Removed unsupported `fontStyle` and `isAutoReturn` parameters from `drawText()` calls (Android SDK takes 6 params, not 8-9)
+  - Note: Inverted text styling (white on black) is not supported by the Android SDK - labels will print with normal text instead
+
 ## [2.7.0] - 2026-01-21
 
 ### Added
