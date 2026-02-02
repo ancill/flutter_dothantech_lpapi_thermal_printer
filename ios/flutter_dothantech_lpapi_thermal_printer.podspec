@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'flutter_dothantech_lpapi_thermal_printer'
-  s.version          = '2.0.1'
+  s.version          = '2.7.2'
   s.summary          = 'Flutter plugin for Dothantech LPAPI thermal label printers'
   s.description      = <<-DESC
 Flutter plugin for Dothantech LPAPI thermal label printers. Supports Bluetooth discovery, direct connection without pairing, and printing of text, barcodes, QR codes, and images.
@@ -36,8 +36,8 @@ Flutter plugin for Dothantech LPAPI thermal label printers. Supports Bluetooth d
   }
 
   s.user_target_xcconfig = {
-    'OTHER_LDFLAGS[sdk=iphoneos*]' => '-force_load ${PODS_ROOT}/../.symlinks/plugins/flutter_dothantech_lpapi_thermal_printer/ios/Frameworks/device/libLPAPI.a',
-    'OTHER_LDFLAGS[sdk=iphonesimulator*]' => '-force_load ${PODS_ROOT}/../.symlinks/plugins/flutter_dothantech_lpapi_thermal_printer/ios/Frameworks/simulator/libLPAPI.a'
+    'OTHER_LDFLAGS[sdk=iphoneos*]' => '$(inherited) -force_load ${PODS_ROOT}/../.symlinks/plugins/flutter_dothantech_lpapi_thermal_printer/ios/Frameworks/device/libLPAPI.a',
+    'OTHER_LDFLAGS[sdk=iphonesimulator*]' => '$(inherited) -force_load ${PODS_ROOT}/../.symlinks/plugins/flutter_dothantech_lpapi_thermal_printer/ios/Frameworks/simulator/libLPAPI.a'
   }
 
   s.swift_version = '5.0'

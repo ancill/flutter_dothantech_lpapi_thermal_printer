@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.7.2] - 2026-02-01
+
+### Fixed
+
+- **iOS podspec `$(inherited)` fix**: Added `$(inherited)` to `user_target_xcconfig` OTHER_LDFLAGS to prevent overriding other framework links (like GoogleMaps). This was causing "Undefined symbol" linker errors when using this plugin alongside GoogleMaps or other frameworks.
+
+### Added
+
+- **iOS `printLotLabel` method**: Prints inventory lot labels with QR code, LOT ID, SKU, expiry date, location code, and zone
+- **iOS `printWeightedItemLabel` method**: Prints labels for weight-based items with QR code, product name, weight, price, and order reference
+- **iOS `printBagLabel` method**: Prints bag labels for packing workflow with zone header, order info, bag number, barcode, and timestamp
+
+### Changed
+
+- Updated podspec version to match pubspec.yaml
+
 ## [2.7.1] - 2026-01-24
 
 ### Fixed
