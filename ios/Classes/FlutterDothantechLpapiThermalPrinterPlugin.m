@@ -42,7 +42,8 @@
     [self printText:text width:width height:height result:result];
   } else if ([@"print1DBarcode" isEqualToString:call.method]) {
     NSString *barcode = call.arguments[@"barcode"];
-    NSString *text = call.arguments[@"text"];
+    id rawText = call.arguments[@"text"];
+    NSString *text = [rawText isKindOfClass:[NSString class]] ? rawText : nil;
     NSNumber *width = call.arguments[@"width"];
     NSNumber *height = call.arguments[@"height"];
     [self print1DBarcode:barcode text:text width:width height:height result:result];
@@ -63,9 +64,12 @@
   } else if ([@"printLotLabel" isEqualToString:call.method]) {
     NSString *lotId = call.arguments[@"lotId"];
     NSString *sku = call.arguments[@"sku"];
-    NSString *expiryDate = call.arguments[@"expiryDate"];
-    NSString *locationCode = call.arguments[@"locationCode"];
-    NSString *zone = call.arguments[@"zone"];
+    id rawExpiryDate = call.arguments[@"expiryDate"];
+    id rawLocationCode = call.arguments[@"locationCode"];
+    id rawZone = call.arguments[@"zone"];
+    NSString *expiryDate = [rawExpiryDate isKindOfClass:[NSString class]] ? rawExpiryDate : nil;
+    NSString *locationCode = [rawLocationCode isKindOfClass:[NSString class]] ? rawLocationCode : nil;
+    NSString *zone = [rawZone isKindOfClass:[NSString class]] ? rawZone : nil;
     NSNumber *width = call.arguments[@"width"];
     NSNumber *height = call.arguments[@"height"];
     [self printLotLabel:lotId sku:sku expiryDate:expiryDate locationCode:locationCode zone:zone width:width height:height result:result];

@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.7.3] - 2026-03-23
+
+### Fixed
+
+- **iOS crash when printing lot labels with null optional fields**: Flutter method channel sends `NSNull` for Dart `null` values, but native code treated `NSNull` as a real `NSString` and crashed on `.length`. Now safely converts `NSNull` to `nil` for nullable parameters (`expiryDate`, `locationCode`, `zone`) in `printLotLabel` and `text` in `print1DBarcode`.
+
 ## [2.7.2] - 2026-02-01
 
 ### Fixed
